@@ -14,7 +14,7 @@
 <body>
     <div class="wrapper">
         <div class="head container">
-            <h1 class="title mb-5">I'm your weather report assistant!</h1>
+            <h1 class="title mb-5" id="title">I'm your weather report assistant!</h1>
 
             <div class="search mb-5">
                 <form id="search-bar">
@@ -25,11 +25,11 @@
                         <div class="col-sm">
                             <input type="submit" value="Search" class="btn btn-primary w-100" />
                         </div>
-                        <div class="col-sm">
+                        <!--  <div class="col-sm">
                             <button type="button" class="btn btn-success w-100" id="current-input">
                                 Current city
                             </button>
-                        </div>
+                        </div>-->
                     </div>
                 </form>
             </div>
@@ -37,91 +37,84 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-6">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <div class="city">
-                                <h2 class="cityname">Kyiv</h2>
-                                <div class="col-sm-6">
-                                    <div class="weather">
+                                <div>
+                                    <span>
+                                        <h3> Your city:</h3>
+                                        <h2 class="cityname" id="city"></h2>
+                                        <b> Weather is </b> <img id="icon">
+                                    </span>
+                                </div>
+                                <div class="col-6">
+                                    <div>
+                                        <div class="weather">
+                                            <h3 class="temperature" id="temperature"></h3>
+                                            <h3> °F</h3>
+                                        </div>
                                         <span class="units">
-                                            <span class="temperature" id="temperature"></span>
-                                            <span class="temperature" id="temperatureSymbol"></span>
+                                            <h3>Current date:</h3>
                                             <span class="units">
-                                                <a href="#" id="celcius-link">°C</a> |
-                                                <a href="#" id="farenheit-link">°F</a>
+                                                <!--     <a href="#" id="celcius-link">°C</a> |
+                                                <a href="#" id="farenheit-link">°F</a>-->
                                             </span>
                                     </div>
                                 </div>
-                                <div id="date"></div>
-                                <em>
-                                    Kyiv, Ukraine <br />
-                                    Clear <br />
-                                    Precipitation: 70% <br />
-                                    Wind: 7km/h</em>
-
-
-
-                                <div class="row pt-5">
-                                    <div class="col-sm-12">
-                                        <p>📚 Your daily quote:</p>
-                                        <em>"It’s all a question of imagination.<br />
-                                            Our responsibility begins with <br />
-                                            the power to imagine." <br />
-                                            (c)Haruki Murakami.</em>
-                                    </div>
-                                </div>
+                                <h3>
+                                    <div id="date"></div>
+                                </h3>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="row">
-                                <em class="mb-4">🌊 5 day weather announce: </em>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Monday</h5>
-                                        <i class="fa-sharp fa-regular fa-sun emoji"> 12°C 25% </i>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Tuesday</h5>
-                                        <i class="fa-solid fa-wind emoji"> 8°C 15% </i>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Wednesday</h5>
-                                        <i class="fa-solid fa-cloud-bolt emoji"> 5°C 45% </i>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Thursday</h5>
-                                        <i class="fa-solid fa-umbrella emoji"> 1°C 65% </i>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Friday</h5>
-                                        <i class="fa-solid fa-cloud-rain emoji"> 15°C 85% </i>
-                                    </div>
-                                </div>
+                            <h3> Weather description: </h3>
+                            <b>
+                                <div id="description"></div>
+                            </b>
+                            <div class="temp-flex">
+                                <div id="temp_max"></div>
+                                <b> °F max temp</b>
                             </div>
+
+                            <div class="temp-flex">
+                                <div id="temp_min"></div>
+                                <b>°F min temp</b>
+                            </div>
+
                         </div>
+                        <div class="temp-flex">
+                            <span id="wind_speed"></span>
+                            <b> m/h wind</b>
+                        </div>
+                        <div>
+                            <span id="humidity"></span>
+                            <b> % humidity</b>
+                        </div>
+                    </div>
+                    <div class="row pt-5">
+                        <div class="col-sm-12">
+                            <p><b>📚 Your daily quote:</b></p>
+                            <span>"It’s all a question of imagination.<br />
+                                Our responsibility begins with <br />
+                                the power to imagine." <br />
+                                (c)Haruki Murakami.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="mb-4">
+                            <h3>🌊 5 day weather announce:</h3>
+                        </div>
+                        <div id="day"></div>
                     </div>
                 </div>
             </div>
             <div class="footer">
                 <div class="adress mb-4">
-                    <em>
-                        <span class="social">Made by Buta Yuliia</span>
-                        <span class="social">email: buta.yulia@gmail.com</span>
-                        <span class="social"> Instagram: buta_yulia</span>
-                    </em>
+                    <div>
+                        <p><b><a class="social" href="https://github.com/ButaYulia/week6"> Open-source</a>
+                                coded by Yuliia Buta</b></p>
+                    </div>
                 </div>
             </div>
         </div>

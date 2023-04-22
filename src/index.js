@@ -1,32 +1,3 @@
-let weather = {
-  paris: {
-    temp: "19.7",
-    humidity: 80,
-    coords: { latitude: 48.51529776, longitude: 2.20564504 },
-  },
-  tokyo: {
-    temp: "17.3",
-    humidity: 50,
-    coords: { latitude: 35.65283, longitude: 139.839478 },
-  },
-  lisabon: {
-    temp: "30.2",
-    humidity: 20,
-    coords: { latitude: 38.736946, longitude: -9.142685 },
-  },
-
-  oslo: {
-    temp: "-5",
-    humidity: 20,
-    coords: { latitude: 59.911491, longitude: 10.757933 },
-  },
-  kyiv: {
-    temp: "19°C",
-    humidity: 55,
-    coords: { latitude: 50.450001, longitude: 30.527756 },
-  },
-};
-
 function formDate(date) {
   let hours = date.getHours();
   if (hours < 10) {
@@ -55,15 +26,11 @@ function formDate(date) {
 function search(event) {
   event.preventDefault();
   let searchInput = document.querySelector("#search-input");
-  const cityNameInput = searchInput.value.toLowerCase();
-  if (weather[cityNameInput] !== undefined) {
-    let cityName = document.querySelector(".cityname");
-    retrievePosition(weather[cityNameInput]);
-  } else {
-    alert(
-      `Sorry, we don't know the weather for this city, try going to https://www.google.com/search?q=weather+${searchInput.value}`
-    );
-  }
+  let apiKey = "62bc298785543e137bc6756e514eb1c3";
+  let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchInput.value
+    .trim()
+    .toLowerCase()}&appid=${apiKey}`;
+  axios.get(url).then(showWeather);
 }
 
 let form = document.getElementById("search-bar");
@@ -73,6 +40,7 @@ let dateElement = document.getElementById("date");
 let currentTime = new Date();
 dateElement.innerHTML = formDate(currentTime);
 
+/*
 let currentTemp = "c";
 
 function fTemp(fahrenheit) {
@@ -111,30 +79,105 @@ let elementF = document.getElementById("farenheit-link");
 elementF.addEventListener("click", changeTemptoF);
 
 let elementC = document.getElementById("celcius-link");
-elementC.addEventListener("click", changeTemptoC);
+elementC.addEventListener("click", changeTemptoC); */
 
 function showWeather(response) {
-  let h1 = document.querySelector("h1");
-  let h2 = document.querySelector("h2");
-  let h3 = document.querySelector("h3");
-  let tempBase = document.getElementById("temperature");
-  let tempSymbol = document.getElementById("temperatureSymbol");
-  let temperature = Math.round(response.data.main.temp);
-  h1.innerHTML = `It is currently ${temperature}° in ${response.data.name}`;
-  h2.innerHTML = ` ${response.data.name} `;
-  tempBase.innerHTML = temperature;
-  tempSymbol.innerHTML = currentTemp.toUpperCase();
-}
-
-function retrievePosition(position) {
-  let currentInput = document.querySelector("#current-input");
-  let apiKey = "73a00877081bd43422bdee0f3022beb5";
-  let lat = position.coords.latitude;
-  let lon = position.coords.longitude;
-  let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
-  axios.get(url).then(showWeather);
+  console.log(response);
+  let title = document.querySelector("#title");
+  let city = document.querySelector("#city");
+  let description = document.querySelector("#description");
+  let temp_min = document.querySelector("#temp_min");
+  let temp_max = document.querySelector("#temp_max");
+  let wind_speed = document.querySelector("#wind_speed");
+  let humidity = document.querySelector("#humidity");
+  let feels_like = document.querySelector("#feels_like");
+  let temperature = document.querySelector("#temperature");
+  let icon = document.querySelector("#icon");
+  temperature.innerHTML = `${response.data.main.temp}`;
+  title.innerHTML = `It is currently ${response.data.main.feels_like}°F in ${response.data.name}`;
+  city.innerHTML = ` ${response.data.name} `;
+  description.innerHTML = `${response.data.weather[0].description}`;
+  icon.src = `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`;
+  temp_max.innerHTML = ` ${response.data.main.temp_max}`;
+  temp_min.innerHTML = ` ${response.data.main.temp_min}`;
+  wind_speed.innerHTML = `${response.data.wind.speed}`;
+  humidity.innerHTML = `${response.data.main.humidity}`;
+  geoCoding();
 }
 
 document.getElementById("current-input").onclick = function () {
   navigator.geolocation.getCurrentPosition(retrievePosition);
 };
+
+function geoCoding(response) {
+  let searchInput = document.querySelector("#search-input");
+  let apiKey = "62bc298785543e137bc6756e514eb1c3";
+  let url = `http://api.openweathermap.org/geo/1.0/direct?q=${searchInput.value}&limit=5&appid=${apiKey}`;
+  axios.get(url).then(function (response) {
+    console.log(response);
+    Smork(response);
+  });
+}
+
+function Smork(response) {
+  let smork = response.data[0].name;
+  let apiKey = "eac360db5fc86ft86450f3693e73o43f";
+  let url = `https://api.shecodes.io/weather/v1/forecast?query=${smork}&key=${apiKey}&units=metric`;
+  axios.get(url).then(function (response) {
+    console.log(response);
+    RenderSmork(response);
+  });
+}
+
+function RenderSmork(response) {
+  let day = ` <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Monday</h5>
+                                <i><span> Weather type: </span>${response.data.daily[0].condition.description},
+                                <span> day temperature </span> ${response.data.daily[0].temperature.day}°C,
+                                <span> humidity </span> ${response.data.daily[0].temperature.humidity}%,
+                                <span> wind speed </span> ${response.data.daily[0].wind.speed}m/s;</i>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Tuesday</h5>
+                                <i><span> Weather type: </span>${response.data.daily[1].condition.description},
+                                <span> day temperature </span> ${response.data.daily[1].temperature.day}°C,
+                                <span> humidity </span> ${response.data.daily[1].temperature.humidity}%,
+                                <span> wind speed </span> ${response.data.daily[1].wind.speed}m/s;</i>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Wednesday</h5>
+                                <i><span> Weather type: </span>${response.data.daily[2].condition.description},
+                                <span> day temperature </span> ${response.data.daily[2].temperature.day}°C,
+                                <span> humidity </span> ${response.data.daily[2].temperature.humidity}%,
+                                <span> wind speed </span> ${response.data.daily[2].wind.speed}m/s;</i>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Thursday</h5>
+                                <i><span> Weather type: </span>${response.data.daily[3].condition.description},
+                                <span> day temperature </span> ${response.data.daily[3].temperature.day}°C,
+                                <span> humidity </span> ${response.data.daily[3].temperature.humidity}%,
+                                <span> wind speed </span> ${response.data.daily[3].wind.speed}m/s;</i>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Friday</h5>
+                                <i><span> Weather type: </span>${response.data.daily[4].condition.description},
+                                <span> day temperature </span> ${response.data.daily[4].temperature.day}°C,
+                                <span> humidity </span> ${response.data.daily[4].temperature.humidity}%,
+                                <span> wind speed </span> ${response.data.daily[4].wind.speed}m/s;</i>
+                            </div>
+                        </div> `;
+  document.getElementById("day").innerHTML = day;
+}
