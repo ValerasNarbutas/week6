@@ -105,10 +105,6 @@ function showWeather(response) {
   geoCoding();
 }
 
-document.getElementById("current-input").onclick = function () {
-  navigator.geolocation.getCurrentPosition(retrievePosition);
-};
-
 function geoCoding(response) {
   let searchInput = document.querySelector("#search-input");
   let apiKey = "62bc298785543e137bc6756e514eb1c3";
